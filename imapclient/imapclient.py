@@ -284,7 +284,7 @@ class IMAPClient(object):
              ([u'\\HasNoChildren', u'\\Starred'], '/', u'[Gmail]/Starred'),
              ([u'\\HasNoChildren', u'\\Trash'], '/', u'[Gmail]/Trash')]
 
-        This is a *deprecated* Gmail-specific IMAP extension (See 
+        This is a *deprecated* Gmail-specific IMAP extension (See
         https://developers.google.com/gmail/imap_extensions#xlist_is_deprecated
         for more information).
         It is the responsibility of the caller to either check for ``XLIST``
@@ -719,7 +719,9 @@ class IMAPClient(object):
         This only works with IMAP servers that support the X-GM-LABELS
         attribute (eg. Gmail).
         """
-        return self._store('+X-GM-LABELS', messages, labels, 'X-GM-LABELS')
+        quoted_labels = [self._imap._quote(l) for l in labels]
+        return self._store('+X-GM-LABELS', messages, quoted_labels,
+                           'X-GM-LABELS')
 
     def remove_gmail_labels(self, messages, labels):
         """Remove one or more *labels* from *messages*.
@@ -732,7 +734,9 @@ class IMAPClient(object):
         This only works with IMAP servers that support the X-GM-LABELS
         attribute (eg. Gmail).
         """
-        return self._store('-X-GM-LABELS', messages, labels, 'X-GM-LABELS')
+        quoted_labels = [self._imap._quote(l) for l in labels]
+        return self._store('-X-GM-LABELS', messages, quoted_labels,
+                           'X-GM-LABELS')
 
     def set_gmail_labels(self, messages, labels):
         """Set the *labels* for *messages*.
@@ -745,7 +749,9 @@ class IMAPClient(object):
         This only works with IMAP servers that support the X-GM-LABELS
         attribute (eg. Gmail).
         """
-        return self._store('X-GM-LABELS', messages, labels, 'X-GM-LABELS')
+        quoted_labels = [self._imap._quote(l) for l in labels]
+        return self._store('X-GM-LABELS', messages, quoted_labels,
+                           'X-GM-LABELS')
 
     def delete_messages(self, messages):
         """Delete one or more *messages* from the currently selected
